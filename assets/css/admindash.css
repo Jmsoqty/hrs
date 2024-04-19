@@ -1,0 +1,111 @@
+ /* Add your custom styles here */
+ body {
+    font-family: Arial, sans-serif;
+    background-image: url("../assets/images/bnb.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+
+}
+
+.container {
+    padding: 20px;
+}
+
+.card1 {
+    background-color: #F8F6E3 !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.card2 {
+    background-color: #F9E897 !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.card3 {
+    background-color: #337357 !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 20px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.card-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 18px;
+    color: black;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: #65B741;
+    border: medium;
+}
+
+.btn-primary:hover {
+    background-color: #527853;
+}
+
+/* Adjust sidebar width */
+.sidebar {
+    width: 250px; /* Set sidebar width */
+    background-color: #333; /* Example background color */
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 500px;
+    transition: width 0.5s;
+}
+
+/* Adjust main content position */
+.main-content {
+    margin-left: 250px; /* Set margin to match sidebar width */
+    padding: 20px; /* Add padding to prevent content from sticking to sidebar */
+}
+
+.content-container {
+    background-color: rgba(155, 171, 184, 0.7); /* Transparent background color */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Box shadow */
+    padding: 20px; /* Padding */
+}
+
+#line {
+    height: 3px; /* Adjust the height as needed */
+    background-color: black; /* Change the color if needed */
+    border: none; /* Remove the default border */
+    margin-top: 10px; /* Adjust the margin if needed */
+    margin-bottom: 20px; /* Adjust the margin if needed */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%; /* Full width on small screens */
+        transition: none;
+    }
+    .main-content {
+        margin-left: 0; /* Reset margin on small screens */
+    }
+}

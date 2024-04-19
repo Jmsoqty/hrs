@@ -1,0 +1,43 @@
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    background-color: #000000; /* Changed background color to original */
+    overflow-y: auto; /* Add scrollbar for vertical overflow */
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0; /* Removed default margin */
+}
+
+.sidebar a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 16px;
+    display: block;
+    margin-bottom: 10px;
+    transition: transform 0.3s; /* Added transition for smooth 3D effect */
+    color: #fff; /* Added text color */
+}
+
+.sidebar a:hover {
+    background-color: #1099f5 !important;
+    transform: translateX(5px); /* Added translation on hover for 3D effect */
+}
+
+
+
+.sidebar hr {
+    border: none; /* Removed default border style */
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Changed separation line color */
+    margin: 10px 0;
+}
+
+.container-fluid {
+    background-color: #222831;
+}
