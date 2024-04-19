@@ -1,14 +1,5 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "hrs";
-
-$connection = new mysqli($servername, $username, $password, $database);
-
-if ($connection->connect_error){
-    die("Connection Failed: " . $connection->connect_error);
-}
+include 'api/authentication_admin.php';
 ?>
   <!DOCTYPE html>
     <html lang="en">
@@ -19,6 +10,8 @@ if ($connection->connect_error){
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <!-- Favicon -->
 

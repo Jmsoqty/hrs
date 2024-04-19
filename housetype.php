@@ -44,70 +44,72 @@
             </div>
         </div>
         <?php
-    $sql = "SELECT * FROM housetype";
-    $result = $connection->query($sql);
-    while ($row = $result->fetch_assoc()) {
-?>
+            $sql = "SELECT * FROM tbl_housetypes";
+            $result = $conn->query($sql);
+            while ($row = $result->fetch_assoc()) {
+        ?>
 
-<div class="modal fade" id="editModal_<?php echo $row['id']; ?>" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="createModalLabel">Edit House Type</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="formCategory_<?php echo $row['id']; ?>" class="forms-sample">
-                    <div class="mb-3">
-                        <label for="categoryInput_<?php echo $row['id']; ?>" class="form-label">Category</label>
-                        <input type="text" class="form-control" id="categoryInput_<?php echo $row['id']; ?>" name="category" placeholder="Enter category" value="<?php echo $row['category']; ?>">
-                        <!-- Add a hidden input field to store the category ID -->
-                        <input type="hidden" id="categoryId_<?php echo $row['id']; ?>" name="categoryId" value="<?php echo $row['id']; ?>">
+        <div class="modal fade" id="editModal_<?php echo $row['housetype_id']; ?>" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createModalLabel">Edit House Type</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary updateHouseType" data-id="<?php echo $row['id']; ?>">Update</button>
+                    <div class="modal-body">
+                        <form id="formCategory_<?php echo $row['housetype_id']; ?>" class="forms-sample">
+                            <div class="mb-3">
+                                <label for="categoryInput_<?php echo $row['housetype_id']; ?>" class="form-label">Category</label>
+                                <input type="text" class="form-control" id="categoryInput_<?php echo $row['housetype_id']; ?>" name="category" placeholder="Enter category" value="<?php echo $row['housetype_name']; ?>">
+                                <!-- Add a hidden input field to store the category ID -->
+                                <input type="hidden" id="categoryId_<?php echo $row['housetype_id']; ?>" name="categoryId" value="<?php echo $row['housetype_id']; ?>">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary updateHouseType" data-id="<?php echo $row['housetype_id']; ?>">Update</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-<?php } ?>
+        <?php } ?>
 
         <table id="datatableid" class="table mt-4">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Category</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                    $sql = "SELECT * FROM housetype";
-                    $result = $connection->query($sql);
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Category</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $sql = "SELECT * FROM tbl_housetypes";
+        $result = $conn->query($sql);
 
-                    if (!$result) {
-                        die("Invalid query: " . $connection->error);
-                    }
-                    $i = 0;
-                    while($row = $result->fetch_assoc()){
-                        $i++;
-                        echo "
-                        <tr>
-                            <td>{$i}</td>
-                            <td>{$row['category']}</td>
-                            <td>
-                                <button class='btn btn-primary btn-sm' data-bs-toggle='modal' data-bs-target='#editModal_{$row['id']}'>Edit</button>
-                                <a class='btn btn-danger btn-sm' href='?id={$row['id']}'>Delete</a>
-                            </td>
-                        </tr>
-                        ";
-                    }
-                ?>
-            </tbody>
-        </table>
+        if (!$result) {
+            die("Invalid query: " . $conn->error);
+        }
+
+        $i = 0;
+        while ($row = $result->fetch_assoc()) {
+            $i++;
+            echo "
+            <tr>
+                <td>{$i}</td>
+                <td>{$row['housetype_name']}</td>
+                <td>
+                    <button class='btn btn-primary btn-sm' data-bs-toggle='modal' data-bs-target='#editModal_{$row['housetype_id']}'>Edit</button>
+                    <button class='btn btn-danger btn-sm delete-btn' data-category-id='{$row['housetype_id']}'>Delete</button>
+                </td>
+            </tr>
+            ";
+        }
+        ?>
+    </tbody>
+</table>
+
         <?php include 'footer.php'; ?>
     </div>  
 </div>
@@ -141,7 +143,7 @@
             // Send an AJAX request to your API endpoint
             $.ajax({
                 type: "POST",
-                url: "category_api.php",
+                url: "api/add_category.php",
                 data: { category: category },
                 success: function(response) {
                     // Display the response message (e.g., success or error)
@@ -169,7 +171,7 @@
             // Send an AJAX request to update the category
             $.ajax({
                 type: "POST",
-                url: "category_edit_api.php",
+                url: "api/edit_category.php",
                 data: {
                     id: id,
                     category: category
@@ -188,6 +190,48 @@
         });
     });
 </script>
+
+<script>
+$(document).ready(function() {
+    // Add event listener for delete button click
+    $('.delete-btn').on('click', function() {
+        // Get the category ID from the data-category-id attribute
+        var categoryId = $(this).data('category-id');
+
+        // Ask for confirmation before deleting the category
+        var confirmation = confirm('Do you want to remove this category?');
+
+        // If the user confirms the action, proceed with the AJAX request
+        if (confirmation) {
+            // Send AJAX request to delete category
+            $.ajax({
+                url: 'api/delete_category.php', // Your PHP script for deleting a category
+                type: 'POST',
+                data: {
+                    category_id: categoryId // Send the category ID to the PHP script
+                },
+                dataType: 'json', // Expect JSON response
+                success: function(response) {
+                    if (response.success) {
+                        // Category deleted successfully
+                        // Optionally, you can remove the row from the table or refresh the page
+                        alert('Category deleted successfully.');
+                        location.reload(); // Refresh the page to reflect the change
+                    } else {
+                        // Handle error
+                        alert('Error deleting category: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Handle error
+                    alert('An error occurred while deleting the category: ' + error);
+                }
+            });
+        }
+    });
+});
+</script>
+
 
 </body>
 </html>

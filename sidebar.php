@@ -17,7 +17,7 @@
             <a href="tenantdetails.php" class="nav-item nav-link <?php if($currentPage == 'tenantdetails.php') echo 'active'; ?>"><i class="fas fa-users mr-2"></i>Tenant Details</a>
             <a href="paymentstatus.php" class="nav-item nav-link <?php if($currentPage == 'paymentstatus.php') echo 'active'; ?>"><i class="fas fa-money-check-alt mr-2"></i>Payment Status</a>
             <a href="createuser.php" class="nav-item nav-link <?php if($currentPage == 'createuser.php') echo 'active'; ?>"><i class="fas fa-user-circle mr-2"></i>Create User Profile</a>
-            <a href="#" class="nav-item nav-link logout-btn <?php if($currentPage == 'logout.php') echo 'active'; ?>"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+            <a href="api/logout.php" class="nav-item nav-link logout-btn"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
         </div>
     </nav>
 </div>

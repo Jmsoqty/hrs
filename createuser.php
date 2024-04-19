@@ -16,7 +16,7 @@
                         <h2 class="mt-3 mb-3" style="color: #bb5340;">Create User Account </h2>
                     </div>
                     <div class="col-md-6 text-md-right">
-                        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createModal">Add House Type</button>
+                        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createModal">Add User</button>
                     </div>
                 </div>
                 <hr id="line"> <!-- Separation line -->
@@ -26,12 +26,10 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="createModalLabel">Add House Type</h5>
+                                <h5 class="modal-title" id="createModalLabel">Add User</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form action="" method="POST" id="Formcategory" class="forms-sample">
-                                    
                                 <div class="mb-3">
                                         <label for="categoryInput" class="form-label">Name</label>
                                         <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
@@ -41,34 +39,33 @@
                                         <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username">
                                     </div>
 
-                                <div class="mb-3">
-                                    <label for="categoryInput" class="form-label">Password</label>
-                                    <input type="text" class="form-control" id="password" name="password" placeholder="Enter Password">
-                                </div>
+                                    <div class="mb-3">
+                                        <label for="categoryInput" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="categoryInput" class="form-label">Contact Number</label>
+                                        <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter Contact Number">
+                                    </div>
 
                                 <div class="mb-3">
-                                    <label for="categoryInput" class="form-label">Confirm Password</label>
-                                    <input type="text" class="form-control" id="confirmpassword" name="confirmpassword" placeholder="Confirm Password">
+                                    <label for="categoryInput" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" min="6" placeholder="Enter Password">
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="categoryInput" class="form-label">Select User Type</label>
                                     <select class="form-select" aria-label="Default select example">
-                                    <option value="1">Admin</option>
-                                    <option value="2">Staff</option>
-                                    <option value="3">Client</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="staff">Staff</option>
+                                    <option value="client">Client</option>
                                     </select>
                                 </div>
-
-                                <div class="mb-3">
-                                    <label for="categoryInput" class="form-label">Avatar</label>
-                                    <input type="file" class="form-control" id="avatar" name="avatar" placeholder="Enter Avatar">
-                                </div>
-                                </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" id="saveHouseType">Save</button>
+                                <button type="button" class="btn btn-primary" id="save_user">Save</button>
                             </div>
                         </div>
                     </div>
@@ -77,15 +74,43 @@
                 <table id="datatableid" class="table mt-4">
                     <thead>
                         <tr>
-                            <th>Avatar</th>
+                            <th>#</th>
                             <th>Name</th>
+                            <th>Email</th>
+                            <th>Contact Number</th>
                             <th>Username</th>
                             <th>User Type</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- User data will be populated here -->
+                        <?php
+                        $sql = "SELECT * FROM tbl_users";
+                        $result = $conn->query($sql);
+
+                        if (!$result) {
+                            die("Invalid query: " . $conn->error);
+                        }
+
+                        $i = 0;
+                        while ($row = $result->fetch_assoc()) {
+                            $i++;
+                            echo "
+                            <tr>
+                                <td>{$i}</td>
+                                <td>{$row['fullname']}</td>
+                                <td>{$row['email']}</td>
+                                <td>{$row['contact_number']}</td>
+                                <td>{$row['username']}</td>
+                                <td>{$row['usertype']}</td>
+                                <td>
+                                    <button class='btn btn-primary btn-sm' data-bs-toggle='modal' data-bs-target='#editModal_{$row['user_id']}'>Edit</button>
+                                    <button class='btn btn-danger btn-sm delete-btn' data-category-id='{$row['user_id']}'>Delete</button>
+                                </td>
+                            </tr>
+                            ";
+                        }
+                        ?>
                     </tbody>
                 </table>
                 <?php include 'footer.php'; ?>
@@ -146,6 +171,53 @@
     });
 </script>
 
+<script>
+$(document).ready(function() {
+    // Attach click event listener to the "Save" button
+    $('#save_user').on('click', function() {
+        // Get the input values from the form
+        var name = $('#name').val();
+        var username = $('#username').val();
+        var email = $('#email').val();
+        var contact = $('#contact').val();
+        var password = $('#password').val();
+        var usertype = $('select').val(); // Get the selected user type from the dropdown
+
+        // Create the data object to send to the API
+        var data = {
+            name: name,
+            username: username,
+            email: email,
+            contact: contact,
+            password: password,
+            usertype: usertype
+        };
+
+        // Send AJAX request to the API
+        $.ajax({
+            url: 'api/register.php', // Your API endpoint for user registration
+            type: 'POST',
+            data: data,
+            dataType: 'json', // Expect JSON response
+            success: function(response) {
+                // Handle successful response
+                if (response.success) {
+                    // Display success message and refresh the page to reflect changes
+                    alert(response.success);
+                    location.reload();
+                } else if (response.error) {
+                    // Display error message
+                    alert(response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle request error
+                alert('An error occurred: ' + error);
+            }
+        });
+    });
+});
+</script>
 
 </body>
 </html>

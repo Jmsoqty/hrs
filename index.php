@@ -1,3 +1,16 @@
+<?php
+session_start();
+include 'api/dbconfig.php';
+if (isset($_SESSION['loggedinasadmin']) && $_SESSION['loggedinasadmin'] === true) {
+  header('Location: admindash.php');
+  exit();
+}
+
+if (isset($_SESSION['loggedinasuser']) && $_SESSION['loggedinasuser'] === true) {
+  header('Location: userdash.php');
+  exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -56,7 +69,7 @@
                       <li><a href="index.php" class="active">Home</a></li>
                       <li><a href="properties.php">Property Details</a></li>
                       <li><a href="contact.php">Contact Us</a></li>
-                      <li><a href="register.php">Login </a></li>
+                      <li><a href="login.php" style="padding-left: 15px;">Login </a></li>
                   </ul>   
                     
                     <!-- ***** Menu End ***** -->

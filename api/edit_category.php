@@ -2,13 +2,13 @@
     // Check if the form is submitted
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Include your database connection file
-        include 'assets/database/db_conn.php';
+        include 'dbconfig.php';
 
         // Sanitize input
         $category = mysqli_real_escape_string($conn, $_POST['category']);
         $category_id = mysqli_real_escape_string($conn, $_POST['id']);
 
-        $update_query = "UPDATE housetype SET category = '$category' WHERE id = '$category_id'";
+        $update_query = "UPDATE tbl_housetypes SET housetype_name = '$category' WHERE housetype_id = '$category_id'";
         if (mysqli_query($conn, $update_query)) {
             echo "Record updated successfully";
         } else {
