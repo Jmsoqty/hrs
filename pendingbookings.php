@@ -16,7 +16,7 @@
                         <h2 class="mt-3 mb-3" style="color: #bb5340;">House Details</h2>
                     </div>
                     <div class="col-md-6 text-md-right">
-                        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createModal">Add House Type</button>
+                        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createModal">Add House Details</button>
                     </div>
                 </div>
                 <hr id="line"> <!-- Separation line -->
@@ -30,8 +30,6 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form action="" method="POST" id="Formcategory" class="forms-sample">
-                                    
                                 <div class="mb-3">
                                         <label for="categoryInput" class="form-label">House Number</label>
                                         <input type="text" class="form-control" id="housenum" name="housenum" placeholder="Enter House Number">
@@ -42,10 +40,10 @@
                                             <option value="">Select Category</option>
                                             <?php
                                                 // Fetch categories from the database
-                                                $sql = "SELECT * FROM housetype";
-                                                $result = $connection->query($sql);
+                                                $sql = "SELECT * FROM tbl_housetypes";
+                                                $result = $conn->query($sql);
                                                 while ($row = $result->fetch_assoc()) {
-                                                    echo "<option value='" . $row['id'] . "'>" . $row['category'] . "</option>";
+                                                    echo "<option value='" . $row['housetype_name'] . "'>" . $row['housetype_name'] . "</option>";
                                                 }
                                             ?>
                                         </select>
@@ -58,32 +56,84 @@
 
                                     <div class="mb-3">
                                         <label for="categoryInput" class="form-label">Price</label>
-                                        <input type="number" class="form-control" id="price" name="price" placeholder="Enter Price">
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="categoryInput" class="form-label">Vacant/Occupied</label>
-                                        <select class="form-select" aria-label="Default select example">
-                                        <option value="1">None</option>
-                                        <option value="1">Vacant</option>
-                                        <option value="2">Occupied</option>
-                                    </select>
+                                        <input type="number" class="form-control" id="price" name="price" placeholder="Enter Price" min="1" step="0.01">
                                     </div>
 
                                     <div class="mb-3">
                                     <label for="categoryInput" class="form-label">Image</label>
-                                    <input type="file" class="form-control" id="avatar" name="avatar" placeholder="Enter Avatar">
+                                    <input type="file" class="form-control" id="avatar" name="avatar" accept=".jpg, .jpeg">
                                 </div>
-
-                                </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" id="saveHouseType">Save</button>
+                                <button type="button" class="btn btn-primary" id="save_house_details">Save</button>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <?php
+                $sql = "SELECT * FROM tbl_house_details";
+                $result = $conn->query($sql);
+                while ($row = $result->fetch_assoc()) {
+                ?>
+
+                <div class="modal fade" id="editModal_<?php echo $row['house_number'];?>" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="createModalLabel">House Detail</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="housenum" class="form-label">House Number</label>
+                                    <input type="text" class="form-control" id="housenum" name="housenum" value="<?php echo htmlspecialchars($row['house_number']); ?>" readonly>
+                                </div>    
+                                <div class="mb-3">
+                                    <label for="categorySelect" class="form-label">Category</label>
+                                    <select class="form-select" id="categorySelect" name="category">
+                                        <option value="">Select Category</option>
+                                        <?php
+                                        // Fetch categories from the database
+                                        $categorySql = "SELECT * FROM tbl_housetypes";
+                                        $categoryResult = $conn->query($categorySql);
+                                        while ($categoryRow = $categoryResult->fetch_assoc()) {
+                                            $selected = ($categoryRow['housetype_name'] == $row['category']) ? 'selected' : '';
+                                            echo "<option value='" . htmlspecialchars($categoryRow['housetype_name']) . "' $selected>" . htmlspecialchars($categoryRow['housetype_name']) . "</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description</label>
+                                    <input type="text" class="form-control" id="description" name="description" value="<?php echo htmlspecialchars($row['description']); ?>">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="price" class="form-label">Price</label>
+                                    <input type="number" class="form-control" id="price" name="price" value="<?php echo htmlspecialchars($row['price']); ?>" min="1" step="0.01">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Vacancy</label>
+                                    <input type="text" class="form-control" value="<?php echo htmlspecialchars($row['vacancy']); ?>" readonly>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="avatar" class="form-label">Image</label>
+                                    <input type="file" class="form-control" id="avatar" name="avatar" accept=".jpg, .jpeg">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="update_house_details">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php } ?>
 
                 <table id="datatableid" class="table mt-4">
                     <thead>
@@ -98,7 +148,35 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- User data will be populated here -->
+                    <?php
+                    $sql = "SELECT * FROM tbl_house_details";
+                    $result = $conn->query($sql);
+
+                    if (!$result) {
+                        die("Invalid query: " . $conn->error);
+                    }
+
+                    $i = 0;
+                    while ($row = $result->fetch_assoc()) {
+                        $imageBlob = $row['image']; 
+                        $base64Image = base64_encode($imageBlob);
+
+                        $imageDataUrl = 'data:image/jpeg;base64,' . $base64Image;
+                        $i++;
+                        echo '<tr>';
+                        echo '<td>' . htmlspecialchars($row['house_number']) . '</td>';
+                        echo '<td>' . htmlspecialchars($row['category']) . '</td>';
+                        echo '<td>' . htmlspecialchars($row['description']) . '</td>';
+                        echo '<td>' . '₱' . htmlspecialchars($row['price']) . '</td>';
+                        echo '<td>' . htmlspecialchars($row['vacancy']) . '</td>';
+                        echo '<td><img src="' . $imageDataUrl . '" alt="House Image" style="width:100px;height:100px;"></td>';
+                        echo '<td>';
+                        echo "<button class='btn btn-primary btn-sm mr-2' data-bs-toggle='modal' data-bs-target='#editModal_{$row['house_number']}'>Edit</button>";
+                        echo "<button class='btn btn-danger btn-sm delete-btn' data-house-number='{$row['house_number']}'>Delete</button>";
+                        echo '</td>';
+                        echo '</tr>';
+                    }
+                    ?>
                     </tbody>
                 </table>
                 <?php include 'footer.php'; ?>
@@ -127,39 +205,132 @@
 </script>
 
 <script>
-    $(document).ready(function () {
-        $('#saveHouseType').click(function (e) {
-            e.preventDefault();
-
-            // Fetch form data
-            var formData = $('#Formcategory').serialize();
-
-            // Send AJAX request to category_api.php
-            $.ajax({
-                type: 'POST',
-                url: 'category_api.php',
-                data: formData,
-                success: function (response) {
-                    // Check the response from the server
-                    if(response == 1){
-                        alert("House type saved successfully!");
-                        window.location.href = 'pendingbookings.php';
-                    }else{
-                        alert("Failed to save house type. Unexpected response.");
-                    }
-                   
-                },
+$(document).ready(function() {
+    $('#save_house_details').click(function(e) {
+        e.preventDefault();
+        
+        // Create a FormData object and append form data
+        var formData = new FormData();
+        formData.append('housenum', $('#housenum').val());
+        formData.append('category', $('#categorySelect').val());
+        formData.append('description', $('#description').val());
+        formData.append('price', $('#price').val());
+        formData.append('avatar', $('#avatar')[0].files[0]);
+        
+        // Make an AJAX request
+        $.ajax({
+            url: 'api/save_house_details.php',
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // Parse JSON response
+                var result = JSON.parse(response);
                 
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                    // Show error message (AJAX request failed)
-                    alert("An error occurred while processing your request. Please try again later.");
+                if (result.success) {
+                    alert(result.success);
+                    // Reload the page or update the data in your table dynamically if needed
+                    location.reload();
+                } else {
+                    alert(result.error);
                 }
-            });
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+                alert('An error occurred while saving house details. Please try again.');
+            }
         });
     });
+});
+
 </script>
 
+<script>
+    $(document).ready(function() {
+    // Handle the form submission for updating house details
+    $('.modal').on('click', '#update_house_details', function() {
+        // Find the modal that contains the button
+        var modal = $(this).closest('.modal');
 
+        // Create a FormData object to hold the form data
+        var formData = new FormData();
+        formData.append('housenum', modal.find('#housenum').val());
+        formData.append('category', modal.find('#categorySelect').val());
+        formData.append('description', modal.find('#description').val());
+        formData.append('price', modal.find('#price').val());
+
+        // Handle the image file input if it exists
+        var avatarInput = modal.find('#avatar')[0];
+        if (avatarInput.files && avatarInput.files[0]) {
+            formData.append('avatar', avatarInput.files[0]);
+        }
+
+        // Send the form data using AJAX
+        $.ajax({
+            url: 'api/update_house_details.php', // Replace with your API URL for updating house details
+            type: 'POST',
+            data: formData,
+            contentType: false, // Needed to handle file uploads
+            processData: false, // Needed to handle file uploads
+            success: function(response) {
+                // Parse the response JSON
+                var data = JSON.parse(response);
+
+                // Handle success or error messages
+                if (data.success) {
+                    alert(data.success); // Display success message
+                    location.reload();
+                } else {
+                    alert(data.error); // Display error message
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX error: ' + error);
+                alert('Failed to update house detail. Please try again.');
+            }
+        });
+    });
+});
+</script>
+
+<script>
+    $(document).ready(function() {
+    // Handle delete button click
+    $('.delete-btn').on('click', function() {
+        var houseNumber = $(this).data('house-number');
+        
+        // Ask for confirmation before deleting
+        if (confirm('Are you sure you want to delete this house?')) {
+            // Send an AJAX request to the delete API
+            $.ajax({
+                url: 'api/delete_house_details.php',
+                type: 'POST',
+                data: {
+                    houseNum: houseNumber
+                },
+                success: function(response) {
+                    // Parse the response JSON
+                    var data = JSON.parse(response);
+                    
+                    // Handle success or error messages
+                    if (data.success) {
+                        alert(data.success);
+                        // Reload the page or update the table to reflect the changes
+                        location.reload();
+                    } else {
+                        alert(data.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error: ' + error);
+                    alert('Failed to delete house detail. Please try again.');
+                }
+            });
+        }
+    });
+});
+
+</script>
 </body>
 </html>

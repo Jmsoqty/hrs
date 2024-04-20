@@ -13,86 +13,77 @@
             <div class="container">
                 <div class="row align-items-center justify-content-between">
                     <div class="col-md-6">
-                        <h2 class="mt-3 mb-3" style="color: #bb5340;">Tenants Details</h2>
+                        <h2 class="mt-3 mb-3" style="color: #bb5340;">Transaction Details</h2>
                     </div>
                     <div class="col-md-6 text-md-right">
-                        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createModal">Add Tenant</button>
+                        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createModal">Print Reports</button>
                     </div>
                 </div>
                 <hr id="line"> <!-- Separation line -->
 
-                <!-- Modal -->
+    
                 <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="createModalLabel">Tenant Details</h5>
+                                <h5 class="modal-title" id="createModalLabel">Print Reports</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <select class="form-select" id="email" name="email">
-                                        <option value="">Select Email</option>
-                                        <!-- Options will be populated via JavaScript -->
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text" for="month">Month</label>
+                                    <select class="form-select" id="month">
+                                        <option value="1">January</option>
+                                        <option value="2">February</option>
+                                        <option value="3">March</option>
+                                        <option value="4">April</option>
+                                        <option value="5">May</option>
+                                        <option value="6">June</option>
+                                        <option value="7">July</option>
+                                        <option value="8">August</option>
+                                        <option value="9">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
                                     </select>
                                 </div>
-
-                                <div class="mb-3">
-                                    <label for="fullname" class="form-label">Fullname</label>
-                                    <input type="text" class="form-control" id="fullname" name="fullname" readonly>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="contact" class="form-label">Contact Number</label>
-                                    <input type="text" class="form-control" id="contact" name="contact" readonly>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="house" class="form-label">House Number</label>
-                                    <select class="form-select" id="house" name="house">
-                                        <option value="">Select House Number</option>
-                                        <!-- Options will be populated via JavaScript -->
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text" for="year">Year</label>
+                                    <select class="form-select" id="year">
+                                        <?php
+                                        // Generate options for years, adjust as needed
+                                        $currentYear = date('Y');
+                                        for ($i = $currentYear - 10; $i <= $currentYear; $i++) {
+                                            echo "<option value=\"$i\">$i</option>";
+                                        }
+                                        ?>
                                     </select>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="monthly_rate" class="form-label">Monthly Rate</label>
-                                    <input type="text" class="form-control" id="monthly_rate" name="monthly_rate" readonly>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="date" class="form-label">Registration Date</label>
-                                    <input type="date" class="form-control" id="date" name="date">
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" id="save_tenant">Save</button>
+                                <button type="button" class="btn btn-info" name="print">Print</button>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
                             
                 <table id="datatableid" class="table mt-4">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Name</th>
-                            <th>House Detail</th>
-                            <th>Registration Date</th>
-                            <th>Monthly Rate</th>
-                            <th>Last Payment</th>
-                            <th>Action</th>
+                            <th>Transaction ID</th>
+                            <th>Tenant's Email</th>
+                            <th>House Number</th>
+                            <th>Paid Amount</th>
+                            <th>Date of Payment</th>
                         </tr>
                     </thead>
                     <tbody>
                     <?php
-                        $sql = "SELECT t.*, p.paid_amount, p.date_paid 
-                                FROM tbl_tenants t
-                                LEFT JOIN tbl_payments p ON t.email = p.tenant_email
-                                GROUP BY t.tenant_id
-                                ORDER BY t.tenant_id";
+                        $sql = "SELECT * FROM tbl_payments";
 
                         $result = $conn->query($sql);
 
@@ -103,19 +94,15 @@
                         $i = 0;
                         while ($row = $result->fetch_assoc()) {
                             $i++;
-                            $registrationDateFormatted = date('M d, Y', strtotime($row['registration_date']));
                             $lastPayment = $row['date_paid'] ?  date('M d, Y', strtotime($row['date_paid'])) : 'No payment made';
                             echo "
                             <tr>
                                 <td>{$i}</td>
-                                <td>{$row['fullname']}</td>
+                                <td>{$row['transaction_id']}</td>
+                                <td>{$row['tenant_email']}</td>
                                 <td>{$row['house_number']}</td>
-                                <td>{$registrationDateFormatted}</td>
-                                <td>₱ {$row['monthly_rate']}</td>
+                                <td>₱ {$row['paid_amount']}</td>
                                 <td>{$lastPayment}</td>
-                                <td>
-                                    <button class='btn btn-danger btn-sm delete-btn' data-tenant-id='{$row['tenant_id']}'>Delete</button>
-                                </td>
                             </tr>
                             ";
                         }
@@ -412,5 +399,21 @@ function deleteTenant(tenantId) {
 }
 
 </script>
+<script>
+    $(document).ready(function() {
+        // When the "Print" button is clicked
+        $('button[name="print"]').click(function() {
+            // Get the selected month and year values
+            var month = $('#month').val();
+            var year = $('#year').val();
+            
+            // Open the generated PDF in a new tab with the selected month and year as parameters
+            window.open('api/report.php?month=' + month + '&year=' + year, '_blank');
+        });
+    });
+</script>
+
+
+
 </body>
 </html>

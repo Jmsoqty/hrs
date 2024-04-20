@@ -15,7 +15,7 @@
             <a href="housetype.php" class="nav-item nav-link <?php if($currentPage == 'housetype.php') echo 'active'; ?>"><i class="fas fa-home mr-2"></i>House Type</a>
             <a href="pendingbookings.php" class="nav-item nav-link <?php if($currentPage == 'pendingbookings.php') echo 'active'; ?>"><i class="fas fa-calendar-check mr-2"></i>House Details</a>
             <a href="tenantdetails.php" class="nav-item nav-link <?php if($currentPage == 'tenantdetails.php') echo 'active'; ?>"><i class="fas fa-users mr-2"></i>Tenant Details</a>
-            <a href="paymentstatus.php" class="nav-item nav-link <?php if($currentPage == 'paymentstatus.php') echo 'active'; ?>"><i class="fas fa-money-check-alt mr-2"></i>Payment Status</a>
+            <a href="transaction_payments.php" class="nav-item nav-link <?php if($currentPage == 'transaction_payments.php') echo 'active'; ?>"><i class="fas fa-wallet mr-2"></i>Transactions</a>
             <a href="createuser.php" class="nav-item nav-link <?php if($currentPage == 'createuser.php') echo 'active'; ?>"><i class="fas fa-user-circle mr-2"></i>Create User Profile</a>
             <a href="api/logout.php" class="nav-item nav-link logout-btn"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
         </div>

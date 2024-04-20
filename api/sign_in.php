@@ -31,8 +31,9 @@ if (mysqli_num_rows($result_users) > 0) {
         $response['redirect'] = 'admindash.php';
     } elseif ($usertype === 'client') {
         $_SESSION['loggedinasuser'] = true;
+        $_SESSION['email'] = $user['email'];
         $response['success'] = 'Sign In Successful';
-        $response['redirect'] = 'clientdash.php';
+        $response['redirect'] = 'userdash.php';
     } elseif ($usertype === 'staff') {
         $_SESSION['loggedinasstaff'] = true;
         $response['success'] = 'Sign In Successful';
