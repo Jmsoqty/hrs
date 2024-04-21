@@ -79,7 +79,7 @@
                             <i class="fas fa-money-bill-alt fa-3x mb-3"></i>
                             <h5 class="card-title">Monthly Earnings</h5>
                             <p class="card-text">&#8369; <?php echo $totalEarningsInPesos; ?></p> <!-- Display total earnings in pesos -->
-                            <a href="#" class="btn btn-primary">View Details</a>
+                            <a href="transaction_payments.php" class="btn btn-primary">View Details</a>
                         </div>
                     </div>
                 </div>
