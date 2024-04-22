@@ -52,7 +52,7 @@
                       <li><a href="index.php">Home</a></li>
                       <li><a href="properties.php">Property Details</a></li>
                       <li><a href="contact.php" class="active">Contact Us</a></li>
-                      <li><a href="register.php">Login </a></li>                      
+                      <li><a href="login.php" style="padding-left: 15px;">Login </a></li>                      
                   </ul>   
                     <!-- ***** Menu End ***** -->
                 </nav>
