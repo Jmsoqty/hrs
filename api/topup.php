@@ -9,9 +9,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['payment']) && isset($_POST['transaction_id'])) {
         $ewallet_value = floatval($_POST['payment']);
         $transaction_id = $_POST['transaction_id'];
-        $email = isset($_POST['email']) ? $_POST['email'] : $_SESSION['email'];
+        $email = $_SESSION['email'];
 
-        // Validate email
+        // Validate email (optional if you're fetching it from session)
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             // Prepare the SQL statement
             $update_sql = "UPDATE tbl_users SET ewallet_value = ewallet_value + ? WHERE email = ?";
