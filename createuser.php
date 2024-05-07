@@ -242,6 +242,12 @@ $(document).ready(function() {
         var password = $('#password').val();
         var usertype = $('select').val(); // Get the selected user type from the dropdown
 
+        // Validate email format
+        if (!isValidEmail(email)) {
+            alert("Please enter a valid email address.");
+            return; // Stop further execution if email is invalid
+        }
+
         // Create the data object to send to the API
         var data = {
             name: name,
@@ -275,8 +281,15 @@ $(document).ready(function() {
             }
         });
     });
+
+    // Function to validate email format
+    function isValidEmail(email) {
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
 });
 </script>
+
 
 <script>
 $(document).ready(function() {
@@ -300,6 +313,12 @@ $(document).ready(function() {
             usertype: modal.find('#userTypeInput_' + userId).val()
         };
 
+        // Validate email format
+        if (!isValidEmail(formData.email)) {
+            alert("Please enter a valid email address.");
+            return; // Stop further execution if email is invalid
+        }
+
         // Make an AJAX POST request to the update script
         $.ajax({
             url: 'api/update_user.php', // URL to your update script
@@ -322,8 +341,15 @@ $(document).ready(function() {
             }
         });
     });
+
+    // Function to validate email format
+    function isValidEmail(email) {
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
 });
 </script>
+
 
 <script>
 $(document).ready(function() {
