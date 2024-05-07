@@ -114,7 +114,7 @@
                                 <td>₱ {$row['monthly_rate']}</td>
                                 <td>{$lastPayment}</td>
                                 <td>
-                                    <button class='btn btn-danger btn-sm delete-btn' data-tenant-id='{$row['tenant_id']}'>Delete</button>
+                                    <button class='btn btn-danger btn-sm delete-btn' data-tenant-id='{$row['tenant_id']}'>Remove as Tenant</button>
                                 </td>
                             </tr>
                             ";

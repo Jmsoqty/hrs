@@ -73,67 +73,67 @@
                 </div>
 
                 <?php
-                $sql = "SELECT * FROM tbl_house_details";
-                $result = $conn->query($sql);
-                while ($row = $result->fetch_assoc()) {
-                ?>
+$sql = "SELECT * FROM tbl_house_details";
+$result = $conn->query($sql);
+while ($row = $result->fetch_assoc()) {
+    ?>
+    <div class="modal fade" id="editModal_<?php echo $row['house_number']; ?>" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createModalLabel">House Detail</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="housenum" class="form-label">House Number</label>
+                        <input type="text" class="form-control" id="housenum" name="housenum" value="<?php echo htmlspecialchars($row['house_number']); ?>" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categorySelect" class="form-label">Category</label>
+                        <select class="form-select" id="categorySelect" name="category">
+                            <option value="">Select Category</option>
+                            <?php
+                            // Fetch categories from the database
+                            $categorySql = "SELECT * FROM tbl_housetypes";
+                            $categoryResult = $conn->query($categorySql);
+                            while ($categoryRow = $categoryResult->fetch_assoc()) {
+                                $selected = ($categoryRow['housetype_name'] == $row['category']) ? 'selected' : '';
+                                echo "<option value='" . htmlspecialchars($categoryRow['housetype_name']) . "' $selected>" . htmlspecialchars($categoryRow['housetype_name']) . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
 
-                <div class="modal fade" id="editModal_<?php echo $row['house_number'];?>" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="createModalLabel">House Detail</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label for="housenum" class="form-label">House Number</label>
-                                    <input type="text" class="form-control" id="housenum" name="housenum" value="<?php echo htmlspecialchars($row['house_number']); ?>" readonly>
-                                </div>    
-                                <div class="mb-3">
-                                    <label for="categorySelect" class="form-label">Category</label>
-                                    <select class="form-select" id="categorySelect" name="category">
-                                        <option value="">Select Category</option>
-                                        <?php
-                                        // Fetch categories from the database
-                                        $categorySql = "SELECT * FROM tbl_housetypes";
-                                        $categoryResult = $conn->query($categorySql);
-                                        while ($categoryRow = $categoryResult->fetch_assoc()) {
-                                            $selected = ($categoryRow['housetype_name'] == $row['category']) ? 'selected' : '';
-                                            echo "<option value='" . htmlspecialchars($categoryRow['housetype_name']) . "' $selected>" . htmlspecialchars($categoryRow['housetype_name']) . "</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="description" name="description" value="<?php echo htmlspecialchars($row['description']); ?>">
+                    </div>
 
-                                <div class="mb-3">
-                                    <label for="description" class="form-label">Description</label>
-                                    <input type="text" class="form-control" id="description" name="description" value="<?php echo htmlspecialchars($row['description']); ?>">
-                                </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="number" class="form-control" id="price" name="price" value="<?php echo htmlspecialchars($row['price']); ?>" min="1" step="0.01" <?php echo ($row['vacancy'] == 'Occupied') ? 'readonly' : ''; ?>>
+                    </div>
 
-                                <div class="mb-3">
-                                    <label for="price" class="form-label">Price</label>
-                                    <input type="number" class="form-control" id="price" name="price" value="<?php echo htmlspecialchars($row['price']); ?>" min="1" step="0.01">
-                                </div>
+                    <div class="mb-3">
+                        <label class="form-label">Vacancy</label>
+                        <input type="text" class="form-control" value="<?php echo htmlspecialchars($row['vacancy']); ?>" readonly>
+                    </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">Vacancy</label>
-                                    <input type="text" class="form-control" value="<?php echo htmlspecialchars($row['vacancy']); ?>" readonly>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="avatar" class="form-label">Image</label>
-                                    <input type="file" class="form-control" id="avatar" name="avatar" accept=".jpg, .jpeg">
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" id="update_house_details">Update</button>
-                            </div>
-                        </div>
+                    <div class="mb-3">
+                        <label for="avatar" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="avatar" name="avatar" accept=".jpg, .jpeg">
                     </div>
                 </div>
-                <?php } ?>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="update_house_details">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+
 
                 <table id="datatableid" class="table mt-4">
                     <thead>
